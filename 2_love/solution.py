@@ -1,7 +1,7 @@
 def solution(total_lambs):
     if total_lambs == 0 or total_lambs == 1:
         return 0
-    
+
     def get_max(t_l):
 
         payouts = [1]
