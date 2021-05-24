@@ -1,10 +1,9 @@
+# https://leetcode.com/problems/jump-game/
 # 55. Jump Game
 # Medium
 # Given an array of non-negative integers nums, you are initially positioned at the first index of the array.
 # Each element in the array represents your maximum jump length at that position.
 # Determine if you are able to reach the last index.
-
-
 
 # Solution 1:
 # Runtime: 108 ms, faster than 8.72% of Python3 online submissions for Jump Game.
@@ -37,7 +36,6 @@ class Solution:
 # Solution 2, better, still not amazing
 # Runtime: 88 ms, faster than 59.46% of Python3 online submissions for Jump Game.
 # Memory Usage: 16.1 MB, less than 50.37% of Python3 online submissions for Jump Game.
-
 class Solution:
     def canJump(self, nums) -> bool:
         
