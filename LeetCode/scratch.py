@@ -20,6 +20,11 @@ def last_ind3():
     return max(ind for ind,v in enumerate(rand_nums) if v == rand_nums[rand_val])
 
 
-print(timeit.timeit("last_ind1()", setup="from __main__ import last_ind1"))
-print(timeit.timeit("last_ind2()", setup="from __main__ import last_ind2"))
-print(timeit.timeit("last_ind3()", setup="from __main__ import last_ind3"))
+# print(timeit.timeit("last_ind1()", setup="from __main__ import last_ind1"))
+# print(timeit.timeit("last_ind2()", setup="from __main__ import last_ind2"))
+# print(timeit.timeit("last_ind3()", setup="from __main__ import last_ind3"))
+
+
+c = "()()()"
+c.replace("()", "")
+print(c)

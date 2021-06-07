@@ -10,6 +10,10 @@
 # Solution 1: 
 # # Runtime: 84 ms, faster than 68.91% of Python3 submissions
 # Memory Usage: 15.5 MB, less than 48.21% of Python3 submissions
+
+from typing import List
+
+
 class Solution:
     def searchRange(self, nums: List[int], target: int) -> List[int]:
         
