@@ -45,6 +45,7 @@ class Solution:
             return -1
         return min_num
 
+
 # Sollution 2: Slow Success
 # Runtime: 1824 ms, faster than 22.48% of Python3 submissions.
 # Memory Usage: 14.6 MB, less than 48.59% of Python3 submissions.
@@ -91,3 +92,42 @@ class Solution:
                 
             
         return memo[-1]
+
+
+
+# Solution 3: - getting better
+# Runtime: 1592 ms, faster than 39.83% of Python3 submissions
+# Memory Usage: 15 MB, less than 31.24% of Python3 submissions
+class Solution:
+    
+    def coinChange(self, coins: List[int], amount: int) -> int:
+        
+        memo = [0]
+        l = 1
+        while l <= amount:
+            
+            curr_min = sys.maxsize
+            
+            for coin in coins:
+                
+                if coin > l:
+                    continue
+                    
+                if coin == l:
+                    curr_min = 1
+                    break
+                    
+                x = l - coin
+                if memo[x] != -1:
+                    curr_min = min(curr_min, memo[x] + 1)
+            
+            
+            if curr_min == sys.maxsize:
+                memo.append(-1)
+            else:
+                memo.append(curr_min)
+            
+            l = len(memo)
+        print(memo)
+        return memo[-1]
+            
