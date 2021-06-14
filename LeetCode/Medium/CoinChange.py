@@ -128,6 +128,6 @@ class Solution:
                 memo.append(curr_min)
             
             l = len(memo)
-        print(memo)
+        
         return memo[-1]
             
