@@ -39,7 +39,7 @@ class Solution:
     
 # Sol 2: - better
 # Runtime: 40 ms, faster than 88.38% of Python3 submissions.
-# Memory Usage: 14.4 MB, less than 50.22% of Python3 submissions.
+# Memory Usage: 14.2 MB, less than 75.61% of Python3 submissions.
 class Solution:
     def countAndSay(self, n: int) -> str:
         
