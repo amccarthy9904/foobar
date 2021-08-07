@@ -5,8 +5,110 @@
 # Return the size of the largest island in grid after applying this operation.
 # An island is a 4-directionally connected group of 1s.
 
+# Attempt 3 -:
+# dict islands
+# find each island and store all points in set as val in dict
+# for each 0 
+# sum all islands that 0 touches
+# this bad boy is O(n), pretty fast, but bad with space,
+# I make an inverse dict called anti_islands that stors cell: island_Key
+# there is definatly a better way to do this but thats ok
+# Runtime: 3272 ms, faster than 78.99% of Python3 online submissions for Making A Large Island.
+# Memory Usage: 77.9 MB, less than 5.16% of Python3 online submissions for Making A Large Island.
+class Solution:
+    
+    def largestIsland(self, grid: List[List[int]]) -> int:
+        
+        if not grid:
+            return 0
+        
+        islands = {}
+        visited = set()
 
+        # dfs that returns list containing tuples of all cell corrds in current island
+        def dfs(i,j, island):
+            
+            nonlocal grid
+            nonlocal visited
+            
+            if (i,j) in visited:
+                return island
+            
+            if grid[i][j] == 1:
+                island.append((i,j))
+                visited.add((i,j))
+            else:
+                return island
+            
+            if i > 0:
+                island = dfs(i - 1, j, island)
+            if j > 0:
+                island =  dfs(i, j - 1, island)
+                
+            if i < (len(grid) - 1):
+                island = dfs(i + 1, j, island)
+                
+            if j < (len(grid[0]) - 1):
+                island = dfs(i, j + 1, island)
+                
+            return island
 
+        # create islands dict
+        # island_key : set((coord), (coord), ...)
+        for i, row in enumerate(grid):
+            for j, cell in enumerate(row):
+                
+                if (i,j) in visited:
+                    continue
+                
+                if cell == 1:
+                    islands[len(islands)] = set(dfs(i,j,[]))
+                    
+                else:
+                    visited.add((i,j))
+       
+        if not islands:
+            return 1
+        
+        anti_island = {}
+        
+        # create an inverse dict to islands
+        # (coord) : island_key 
+        for isl in islands.keys():
+            for cell in islands[isl]:
+                anti_island[cell] = isl
+                
+        largest = len(islands[0])
+
+        # for every 0 cell
+        for i, row in enumerate(grid):
+            for j, cell in enumerate(row):
+                
+                if cell == 0:
+                    # sum size  of current cell + all connected islands
+                    curr_conn = set()
+                    size = 1
+                    
+                    if i > 0 and (i-1,j) in anti_island and anti_island[(i-1,j)] not in curr_conn:
+                        size += len(islands[anti_island[(i-1,j)]])
+                        curr_conn.add(anti_island[(i-1,j)])
+                        
+                    if j > 0 and (i,j-1) in anti_island and anti_island[(i,j-1)] not in curr_conn:
+                        size += len(islands[anti_island[(i,j-1)]])
+                        curr_conn.add(anti_island[(i,j-1)])
+                        
+
+                    if i < (len(grid) - 1) and (i+1,j) in anti_island and anti_island[(i+1,j)] not in curr_conn:
+                        size += len(islands[anti_island[(i+1,j)]])
+                        curr_conn.add(anti_island[(i+1,j)])
+                        
+                    if j < (len(grid[0]) - 1) and (i,j+1) in anti_island and anti_island[(i,j+1)] not in curr_conn:
+                        size += len(islands[anti_island[(i,j+1)]])
+                        curr_conn.add(anti_island[(i,j+1)])
+                    
+                    largest = max(size, largest)
+                    
+        return largest
 
 # Attempt 2:
 # for each 0
