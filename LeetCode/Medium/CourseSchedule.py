@@ -48,6 +48,6 @@ class Solution:
                 if pre_requs_met:
                     start.add(k)
                     del d[k]
-        
+         
         return len(start) == numCourses
         
