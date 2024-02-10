@@ -29,3 +29,23 @@ normalization not needed
 better for distributed comnputing, scalability, cost, 
 good for unstructured and semi structured data
 good if you need scalability
+
+
+#### AWS DB offerings
+
+- Amazon RDS
+    - relational database services
+    - MySQL, PostgreSQL, MariaDB, Oracle, and Microsoft SQL Server
+- Amazon Dynamo DB
+    - A fully managed NoSQL database service.
+    - Designed for high-performance, low-latency applications.
+    - Supports both document and key-value data models.
+- Amazon DocumentDB
+    - fully managed document database service compatible with MongoDB.
+    - scales and provides high availability for document-oriented applications.
+- Amazon ElastiCache
+    - in-memory data store service
+    - Redis and Memcached, providing a caching layer for improved performance.
+- Amazon Timestream
+    - A fully managed, serverless time-series database.
+    - Optimized for IoT and operational applications that generate high volumes of time-stamped data.
