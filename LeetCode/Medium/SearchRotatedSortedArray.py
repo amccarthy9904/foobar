@@ -9,8 +9,32 @@
 # Given the array nums after the rotation and an integer target, 
 # return the index of target if it is in nums, or -1 if it is not in nums.
 
+# Runtime 46ms Beats 50.38% of users with Python3
+class Solution:
+    def search(self, nums: List[int], target: int) -> int:
 
+        l, r = 0, len(nums) -1
+        while l <= r:
 
+            m = (l + r) // 2
+            print(f"m{m}")
+            if nums[m] == target:
+                return m
+
+            if nums[l] <= nums[m]:
+                if target < nums[m] and target >= nums[l]:
+                    r = m - 1
+                else:
+                    l = m + 1
+            
+            else:
+                if target > nums[m] and target <= nums[r]:
+                    l = m + 1
+                else:
+                    r = m - 1
+            
+        return -1
+        
 
 # Solution: not great, shouldnt need to check l r and m
 # Runtime: 40 ms, faster than 74.72% of Python3 submissions

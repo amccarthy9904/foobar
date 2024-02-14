@@ -6,6 +6,51 @@
 # An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically. 
 # You may assume all four edges of the grid are all surrounded by water.
 
+# Runtime 204ms Beats 99.83% of users with Python3
+class Solution:
+    def numIslands(self, grid: List[List[str]]) -> int:
+        
+        num = 0
+        def dfs(i,j):
+            
+            if grid[i][j] == "0":
+                return None
+            grid[i][j] = "0"
+            if i > 0:
+                dfs(i-1, j)
+            if j > 0:
+                dfs(i, j-1)
+
+            if i < len(grid)-1:
+                dfs(i+1, j)
+            if j < len(grid[0])-1:
+                dfs(i, j+1)
+
+
+
+        for i in range(len(grid)):
+            for j in range(len(grid[0])):
+                if grid[i][j] == "1":
+                    num+=1
+                    print(num)
+                    dfs(i,j)
+        return num
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Runtime: 140 ms, faster than 65.74% of Python3 online submissions for Number of Islands.
 # Memory Usage: 22.7 MB, less than 5.11% of Python3 online submissions for Number of Islands.
 class Solution:

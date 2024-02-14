@@ -11,6 +11,42 @@
 
 
 
+# Runtime 84ms Beats 89.83% of users with Python3
+class Solution:
+    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+
+        adj = {}
+        for req in prerequisites:
+            if req[0] not in adj:
+                adj[req[0]] = set([req[1]])
+            else:
+                adj[req[0]].add(req[1])
+        
+
+        def find_loop(visited, curr):
+            if curr not in adj:
+                return False
+            
+            if curr in visited:
+                return True
+
+            visited.add(curr)
+            
+            for req in adj[curr]:
+                if find_loop(visited, req):
+                    return True
+                visited.add(req)
+            del adj[curr]
+
+        for i in range(numCourses):
+
+            if i in adj and find_loop(set(), i):
+                return False
+        
+        return True
+
+
+
 # Runtime: 96 ms, faster than 77.55% of Python3 online submissions for Course Schedule. 
 class Solution:
     def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
