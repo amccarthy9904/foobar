@@ -90,5 +90,43 @@ class Solution:
             d[c] = ind
         
         return longest
+    
+
+# a good revision:
+class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+
+        ret,l = 0, -1
+        d = {}
+        for r, c in enumerate(s):
+
+            if c in d and d[c] > l:
+                l = d[c]
+            d[c] = r
+            ret = max(ret, r-l)
+        return ret
         
+# another try
+class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+
+
+        if len(s) < 2:
+            return len(s)
+        
+        seen = {s[0]:0}
+        ret = 0
+        l = 0
+        for r in range(1, len(s)):
+            if s[r] in seen:
+                done = False
+                while not done:
+                    done = s[l] == s[r]
+                    del seen[s[l]]
+                    l += 1
+            
+            ret = max(ret, r - l+1)
+            seen[s[r]] = r
+        return ret
+
         
