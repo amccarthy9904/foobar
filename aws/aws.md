@@ -2,7 +2,19 @@
 [practice exams](https://portal.tutorialsdojo.com/courses/aws-certified-developer-associate-practice-exams/)
 [video](https://www.youtube.com/watch?v=RrKRN9zRBWs)
 [shorter video](https://www.youtube.com/watch?v=bhomsGI56Ok)
-
+[AWS Lambda cheat sheet](https://tutorialsdojo.com/aws-lambda/)
+[AWS Lambda best practives](https://docs.aws.amazon.com/lambda/latest/dg/best-practices.html)
+[AWS KMS cheat sheet](https://tutorialsdojo.com/aws-key-management-service-aws-kms/)
+[AWS Coloudformation cheat sheet](https://tutorialsdojo.com/aws-cloudformation/)
+[AWS Coloudformation CLI reference](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/cloudformation/index.html)
+[AWS DynamoDB cheet sheet](https://tutorialsdojo.com/amazon-dynamodb/)
+[AWS elasticache cheat sheet](https://tutorialsdojo.com/amazon-elasticache/)
+[AWS Elastic Beanstalk Cheat Sheet](https://tutorialsdojo.com/aws-elastic-beanstalk/)
+[AWS EC2 Elastic Compute Cloud Cheat Sheet](https://tutorialsdojo.com/amazon-elastic-compute-cloud-amazon-ec2/)
+[Amazon ECS Elastic Container Service Cheat Sheet](https://tutorialsdojo.com/amazon-elastic-container-service-amazon-ecs/)
+[ebextensions](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/ebextensions.html)
+[AWS CodeDeploy Cheat Sheet](https://tutorialsdojo.com/aws-codedeploy/)
+[AWS CodeCommit Cheat Sheet](https://tutorialsdojo.com/aws-codecommit/)
 ### Exam guide
 
 passing grade: 72%
@@ -102,7 +114,13 @@ installs sqs daemon on EC2 so they can talk to the SQS queue
     - safest way to deploy for crit apps
     - if fail you can use old EC2s
 
-5. blue/green
+5. Canary
+    - load balacned env + Single Instance
+    - Load balancer sends small percentage of traffic to new version
+    - Use metrics to measure the success of the deployment; this indicates whether the deployment should continue or roll back
+    - Increase the load on the new version until either all users are on the new version or you have fully rolled back.
+
+6. blue/green
     - only one w/ DNS change
     - similar to immutable
     - replicate environment w/ updated version
@@ -410,6 +428,7 @@ categories that align with the offerings primary functions:
 
 #### Analytics:
 • Amazon Athena
+    - query S3 using SQL queries, analyze JSON, CSV, Parquet, others 
 • Amazon Kinesis
     - real time data output from infrastucture
     - visualize in other service like ApacheSpark
@@ -441,6 +460,12 @@ categories that align with the offerings primary functions:
     - only pay for exact number of actions that happen
 
 • AWS Serverless Application Model (AWS SAM)
+    - simplify the development and deployment of serverless applications on AWS
+    - shorthand syntax to define functions, APIs, databases, and event source mappings
+    - model applications using YAML or JSON config files, transformed into AWS CloudFormation syntax on deploy
+    - built on top of CloudFormation
+    - abstract, short-hand syntax, define infrastructure with fewer lines of code, less errors
+    - AWS SAM CLI to build, test, and debug their serverless applications locally
 
 #### Containers:
 • AWS Copilot
@@ -484,6 +509,7 @@ categories that align with the offerings primary functions:
 • AWS CodeArtifact
 • AWS CodeBuild
 • AWS CodeCommit
+    - hosts secure, private Git repositories
 • AWS CodeDeploy
 • Amazon CodeGuru
 • AWS CodePipeline
@@ -499,17 +525,29 @@ categories that align with the offerings primary functions:
     - yaml json infrastucture templates 
 • AWS CloudTrail
 • Amazon CloudWatch
-    - collects logs / metrics from ever ec2 instance
+    - collects logs / metrics from ec2 instances
 • Amazon CloudWatch Logs
+    - a feature of cloudwatch, lets you look at logs 
 • AWS Systems Manager
+    - unified user interface, allowing you to automate and manage operational tasks across your AWS resources.
+    - Parameter Store: Securely store configuration data and secrets, such as db connection strings, in a centralized, scalable storage.
+    - Run Command: Remotely and securely execute commands on EC2 instances and other managed resources, making it easier to perform operational tasks at scale
+    - Automation: Create and execute workflows that automate manual and repeatable tasks
+    - Session Manager: Securely connect to instances without the need for opening inbound ports or managing SSH keys, simplifying access management.
 
 #### Networking and Content Delivery:
 • Amazon API Gateway
 • Amazon CloudFront
+    - CDN that accelerates delivery web content (images, videos APIs) to end-users by caching content at edge locations closest to them, reducing latency and improving overall website performance.
 • Elastic Load Balancing (ELB)
     - distributes traffic evenly across EC2 instances automatically
     - pass data to auto scaling
     - define policies that will spin up / down new ec2 instances as needed
+    - 2 types of load balancers : Classic and Application Load balancer
+    - ALB has 3 sub types Application, network, Gateway
+    - classic has less features, operates at layers 4, 7 transport, application
+    - ALB operates only layer 7 application
+    - ALB content-based routing, WebSocket and HTTP/2 protocols, host-based + path-based routing, integration with ECS (Elastic Container Service) and EKS (Elastic Kubernetes Service).
 • Amazon Route 53
 • Amazon VPC
 
@@ -533,7 +571,10 @@ categories that align with the offerings primary functions:
     - more manual config required
 • Amazon Elastic File System (Amazon EFS)
     - higher cost high perfomance file storeage
-    - less management and config required than EBS
+    - less management and config required than EBS   
+    - less performant to workloads that require random access over large files
+    - better for distributeing highly parallelized workloads ie analytical / media processing across several machines
+### 
 • Amazon S3
     - first thing aws offerd
     - stores any file or obj
@@ -703,6 +744,4 @@ paste into create instance file
 get user data from marketplace-ec2-startup
 
 AMIs help to easily reproduce EC2s instances with your app on them
-
-
 
