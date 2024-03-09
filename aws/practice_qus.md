@@ -440,27 +440,135 @@ Upload the code to an Amazon EFS mounted on an EC2 instance. Write a script that
  - EFS : file storage service for use with Amazon EC2
    - less performant to workloads that require random access over large files
    - better for distributeing highly parallelized workloads ie analytical / media processing across several machines
+
+### CodePipeline CodeDeploy (CI/CD) pipelines in AWS
+A company is heavily using a range of AWS services to host their enterprise applications. Currently, their deployment process still has a lot of manual steps which is why they plan to automate their software delivery process using continuous integration and delivery (CI/CD) pipelines in AWS. They will use CodePipeline to orchestrate each step of their release process and CodeDeploy for deploying applications to various compute platforms in AWS.
+In this architecture, which of the following are valid considerations when using CodeDeploy? (Select TWO.)
+#### do
+AWS Lambda compute platform deployments cannot use an in-place deployment type.
+CodeDeploy can deploy applications to both your EC2 instances as well as your on-premises servers.
+#### dont
+You have to install and use the CodeDeploy agent installed on your EC2 instances and ECS cluster.
+The CodeDeploy agent communicates using HTTP over port 80.
+CodeDeploy can deploy applications to EC2, AWS Lambda, and Amazon ECS only.
+#### info
+- in-place deployment type : not applicable to Lambda only EC2 instances
+   - lambda uses canary all-at-once or linear
+- CodeDeploy : can deploy EC2, Lambda, ECS and on-prem
+   - agent communicates via https port 443
+   - requires install and use of CodeDeploy agent on EC2 
+   - not required for ECS cluster
+
+### CloudFormation and SAM
+An aerospace engineering company has recently migrated to AWS for their cloud architecture. They are using CloudFormation and AWS SAM as deployment services for both of their monolithic and serverless applications. There is a new requirement where you have to dynamically install packages, create files, and start services on your EC2 instances upon the deployment of the application stack using CloudFormation.
+
+Which of the following [helper scripts](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-helper-scripts-reference.html) should you use in this scenario?
+
+#### do
+cfn-init
+#### dont
+cfn-hup
+cfn-signal
+cfn-get-metadata 
+#### info
+ - cfn-hup : check for updates to metadata and execute custom hooks when changes are detected
+ - cfn-init : retrieve and interpret resource metadata, install packages, create files, start services
+ - cfn-signal : signal a CreationPolicy or WaitCondition, allows synchronize other resources in the stack when the prerequisite resource or application is ready
+ - cfn-get-metadata : retrieve metadata for a resource or path to a specific key.
+
+
+### CloudFormation template that includes your SAM script
+You are using AWS Serverless Application Model (AWS SAM) to build and deploy applications in your serverless infrastructure. Your manager instructed you to create a CloudFormation template that includes your SAM script and other service configurations. This template will be used to launch a similar infrastructure in another region.
+
+What should you do in order to accomplish this task?
+#### do
+#### dont
+Add a Transform section in the template to specify the version of the AWS Serverless Application Model (AWS SAM) to use.
+Add a Resources section in the template to specify the version of the AWS Serverless Application Model (AWS SAM) to use.
+Add a Parameters section in the template to specify the version of the AWS Serverless Application Model (AWS SAM) to use.
+Add a Mappings section in the template to specify the version of the AWS Serverless Application Model (AWS SAM) to use.
+#### info
+ - CloudFormation :  JSON- or YAML-formatted text file that describes your AWS infrastructure
+   - model and provision AWS resources in your cloud environment
+ - CloudFormation sections : 
+   - Description : text string that describes the template must always follow the template format version section
+   - Metadata : Optional provides additional information about the template
+   - Parameters : Defines values to pass to your template at runtime (when you create or update a stack). You can refer to parameters from the Resources and Outputs sections of the template.
+   - Mappings: A mapping of keys and associated values that you can use to specify conditional parameter values. You can match a key to a corresponding value by using the Fn::FindInMap intrinsic function in the Resources and Outputs sections 
+   - Conditions : Defines conditions that control whether certain resources are created or whether certain resource properties are assigned a value during stack creation or update
+   - Transform : Optional specifies the version of AWS SAM to use
+   - Resources : stack resources and their properties, such as an EC2 instance or an S3 bucket
+   - Outputs : values that are returned whenever you view your stack's properties (aws cloudformation describe-stacks)
+   - AWS::Serverless transform : a macro hosted by AWS CloudFormation, takes an entire template written in AWS SAM syntax and transforms and expands it into a compliant AWS CloudFormation template
+
+### AppSpec file in CodeDeploy
+A developer is preparing the application specification (AppSpec) file in CodeDeploy, which will be used to deploy her Lambda functions to AWS. In the deployment, she needs to configure CodeDeploy to run a task before the traffic is shifted to the deployed Lambda function version.
+
+Which deployment lifecycle event should she configure in this scenario?
+
+#### do
+BeforeAllowTraffic
+#### dont
+BeforeInstall
+Install
+Start
+#### info
+ - AppSpec file in CodeDeploy : JSON-formatted file used to manage a deployment
+   - defines lifecycle events, scripts that CodeDeploy should execute during deployment 
+   - for EC2 + On-Prem AppSpec file must be named appspec.yml,in the root of the directory structure
+   - sections : including version, os, files, permissions, hooks, and other
+   - hooks : Lambda validation functions to run during a deployment lifecycle event
+   - BeforeAllowTraffic : run tasks before traffic is shifted to the deployed Lambda function version.
+   - AfterAllowTraffic : run tasks after all traffic is shifted to the deployed Lambda function version.
+   - BeforeInstall : this event is only applicable for ECS, EC2 or On-Premises compute platforms and not for Lambda deployments.
+   - Install : CodeDeploy agent copy the revision files from temp location to final destination folder of EC2 or On-Premises server. This deployment lifecycle event is not available for Lambda or ECS deployments.
+
+ 
+### Elastic Beanstalk full capacity deploy
+A single docker container environment is hosted in Elastic Beanstalk. Your manager instructed you to ensure that the compute resources maintain full capacity during deployments to avoid any degradation of the service or possible down time.
+
+Which of the following deployment methods should you use to satisfy the given requirement? (Select TWO.)
+#### do
+Rolling with additional batch
+Immutable
+#### dont
+All at once
+Rolling
+Canary
+#### info
+ - All at once : all instances simultaneously, downtime
+ - Rolling with additional batch : 
+ - Immutable : Deploy update to a fresh group of instances by performing an immutable update.
+ - Rolling : deploy in batches. Each batch is taken down during deployment phase, reducing your environment’s capacity by the number of instances per batch
+ - Canary : not readily available in Elastic Beanstalk, but primarily to Lambda.
+ - Blue/Green : Deploy update to a separate environment, and then swap CNAMEs of the two environments to redirect traffic to the new version instantly.
+
+### what types does CodeDeploy support?
+The current application deployment process of a company is tedious and is prone to errors. They asked a developer to set up CodeDeploy as their deployment service, which can automate their application deployments on their hybrid cloud architecture.
+
+Which of the following deployment types does CodeDeploy support? (Select TWO.)
+#### do
+In-place deployments to on-premises servers
+Blue/green deployments to ECS.
+#### dont
+Blue/green deployments to on-premises servers.
+Rolling deployments to ECS.
+In-place deployments to AWS Lambda.
+#### info
+ - ECS : Canary, Linear, All at once
+ - Lambda : Canary, Linear, All at once
+ - EC2/On-Premises : Blue/green || In place for [All at once, Half at a time, One at a Time]
+
+
 ### 
 #### do
 #### dont
 #### info
-
-### 
-#### do
-#### dont
-#### info
-
-
 
 
 
 ## Security
 
-
-### 
-#### do
-#### dont
-#### info
 
 
 

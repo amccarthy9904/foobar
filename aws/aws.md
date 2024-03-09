@@ -7,6 +7,7 @@
 [AWS KMS cheat sheet](https://tutorialsdojo.com/aws-key-management-service-aws-kms/)
 [AWS Coloudformation cheat sheet](https://tutorialsdojo.com/aws-cloudformation/)
 [AWS Coloudformation CLI reference](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/cloudformation/index.html)
+[AWS Serverless Application Model Cheat Sheet](https://tutorialsdojo.com/aws-serverless-application-model-sam/)
 [AWS DynamoDB cheet sheet](https://tutorialsdojo.com/amazon-dynamodb/)
 [AWS elasticache cheat sheet](https://tutorialsdojo.com/amazon-elasticache/)
 [AWS Elastic Beanstalk Cheat Sheet](https://tutorialsdojo.com/aws-elastic-beanstalk/)
@@ -511,6 +512,7 @@ categories that align with the offerings primary functions:
 • AWS CodeCommit
     - hosts secure, private Git repositories
 • AWS CodeDeploy
+    - deployment service that automates software deployments to Amazon EC2, AWS Fargate, AWS Lambda, and on-premises.
 • Amazon CodeGuru
 • AWS CodePipeline
 • AWS CodeStar
@@ -523,6 +525,7 @@ categories that align with the offerings primary functions:
 • AWS Cloud Development Kit (AWS CDK)
 • AWS CloudFormation
     - yaml json infrastucture templates 
+    - [helper scripts](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-helper-scripts-reference.html)
 • AWS CloudTrail
 • Amazon CloudWatch
     - collects logs / metrics from ec2 instances
