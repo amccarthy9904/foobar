@@ -7,7 +7,7 @@
 [AWS KMS cheat sheet](https://tutorialsdojo.com/aws-key-management-service-aws-kms/)
 [AWS Coloudformation cheat sheet](https://tutorialsdojo.com/aws-cloudformation/)
 [AWS Coloudformation CLI reference](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/cloudformation/index.html)
-[AWS Serverless Application Model Cheat Sheet](https://tutorialsdojo.com/aws-serverless-application-model-sam/)
+[AWS SAM Serverless Application Model Cheat Sheet](https://tutorialsdojo.com/aws-serverless-application-model-sam/)
 [AWS DynamoDB cheet sheet](https://tutorialsdojo.com/amazon-dynamodb/)
 [AWS elasticache cheat sheet](https://tutorialsdojo.com/amazon-elasticache/)
 [AWS Elastic Beanstalk Cheat Sheet](https://tutorialsdojo.com/aws-elastic-beanstalk/)
@@ -16,6 +16,13 @@
 [ebextensions](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/ebextensions.html)
 [AWS CodeDeploy Cheat Sheet](https://tutorialsdojo.com/aws-codedeploy/)
 [AWS CodeCommit Cheat Sheet](https://tutorialsdojo.com/aws-codecommit/)
+[AWS Identity & Access Management IAM Cheat Sheet](https://tutorialsdojo.com/aws-identity-and-access-management-iam/)
+[AWS Secrets Manager Cheat Sheet](https://tutorialsdojo.com/aws-secrets-manager/)
+[AWS Secrets Manager vs Systems Manager Parameter Store](https://tutorialsdojo.com/aws-secrets-manager-vs-systems-manager-parameter-store/)
+
+
+[Total Study guide](https://tutorialsdojo.com/aws-certified-developer-associate-exam-guide-study-path-dva-c02/)
+
 ### Exam guide
 
 passing grade: 72%
@@ -748,3 +755,12 @@ get user data from marketplace-ec2-startup
 
 AMIs help to easily reproduce EC2s instances with your app on them
 
+### KMS vs Secrets Manager
+#### AWS Key Management Service (KMS)
+- Primary Use Case: KMS is primarily used for managing cryptographic keys. It allows you to create, control, and manage cryptographic keys used to encrypt and decrypt data. KMS supports both symmetric and asymmetric keys, and it integrates with AWS services to encrypt data at rest and in transit.
+- Key Features: KMS provides features like key rotation, audit logging, and integration with AWS CloudTrail for monitoring key usage. It also supports the use of AWS Identity and Access Management (IAM) for access control over the keys.
+- Benefits: KMS helps in securing data by providing a centralized key management solution, ensuring that encryption keys are securely generated, stored, and rotated.   It also simplifies the process of managing encryption across AWS services 35.
+#### AWS Secrets Manager
+- Primary Use Case: AWS Secrets Manager is designed to manage and rotate secrets, such as database credentials, API keys, and other sensitive information. It automatically handles the rotation of secrets, reducing the risk of exposure due to compromised or outdated secrets.
+- Key Features: Secrets Manager encrypts secrets using AWS KMS, ensuring that secrets are stored securely. It also provides audit logging capabilities, allowing you to track when secrets were accessed, rotated, or modified.
+- Benefits: Secrets Manager simplifies the management of sensitive information by automating the rotation of secrets, reducing manual management efforts, and ensuring improved security. It also helps in meeting compliance requirements by providing secure and auditable handling of sensitive data 35.

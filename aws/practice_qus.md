@@ -555,9 +555,412 @@ Blue/green deployments to on-premises servers.
 Rolling deployments to ECS.
 In-place deployments to AWS Lambda.
 #### info
- - ECS : Canary, Linear, All at once
+ - ECS : Blue/green
  - Lambda : Canary, Linear, All at once
- - EC2/On-Premises : Blue/green || In place for [All at once, Half at a time, One at a Time]
+ - EC2/On-Premises : Blue/green || In place for [All at once, Half at a time, One at a Time] 
+   - only one that can do blue green and inplace on CodeDeploy
+
+
+### update SAM
+A development team is working on an AWS Serverless Application Model (SAM) application with its source code hosted on GitHub. A newly recruited developer clones the repository and observes that the SAM template contains references to AWS Lambda functions with CodeUri pointing to local file paths. The developer has added a new Lambda function and must redeploy the updated version to Production.
+
+Which combination of steps must be taken to satisfy the requirement? (Select Two
+#### do
+Execute sam build to resolve dependencies and construct deployment artifacts for all functions and layers in the SAM template.
+Use the sam deploy command to deploy the application with a specified CloudFormation stack.
+#### dont
+Execute sam publish to make the application available in the AWS Serverless Application Repository.
+
+Run sam init to initialize a new SAM project.
+
+Use the sam sync command to synchronize the local changes to the application in AWS.
+#### info
+ - sam publish : gives link to the AWS Serverless Application Repository directly to your application
+ - sam deploy : packages your application, uploads it to an S3 bucket, and deploys it using CloudFormation
+ - sam init : create a new SAM application with a sample AWS Lambda function
+ - sam build : compile your application's source code and prepare it for deploymen
+ - sam sync : watches your local application for changes and automatically syncs them to the AWS Cloud
+ - sam local : local invocation and testing of your Lambda functions and SAM-based serverless applications by executing your code locally
+
+### Lambda features
+A Lambda function is over 80 MB in size, which exceeds the deployment package size limit for direct uploads. You want to refactor the function to pull in additional code and other dependencies from another source, which will reduce the size of the deployment.
+
+Which feature of Lambda should you use in order to implement the above task? 
+
+#### do
+Layers
+#### dont
+Execution Context
+Environment Variable
+Alias
+#### info
+
+ - Layers :  distribution mechanism for libraries, custom runtimes, and other function dependencies
+   - code sharing and separation of responsibilities so that you can manage your function's code and dependencies independently
+ - Execution Context : runtime environment, the function's code, and any dependencies
+ - Environment Variable : key-value pairs to customize the behavior of your function w/o changeing code
+ - Alias : pointer to a specific Lambda function version
+   - manage different stages of your application, such as development, testing, and production
+
+### AWS::Lambda::Function resource
+A developer is writing a CloudFormation template which will be used to deploy a simple Lambda function to AWS. The function to be deployed is made in Python with just 3 lines of codes which can be written inline in the template.
+
+Which parameter of the AWS::Lambda::Function resource should the developer use to place the Python code in the template?
+
+#### do
+ZipFile
+#### dont
+Code
+CodeUri
+Handler
+
+#### info
+
+### zip upload and make template file for deployment
+A development team has recently completed building their serverless application, and they are now ready to deploy it to AWS. They need to zip their code artifacts, upload them to Amazon S3, and produce the package template file for deployment.
+
+Which command is the MOST suitable to use for automating the deployment steps?
+#### do
+sam deploy
+#### dont
+sam package
+aws cloudformation deploy
+sam publish
+#### info
+ - aws cloudformation : expects artifacts already packaged and uploaded to S3. It doesn’t handle the packaging process implicitly.
+ - sam package : prepares the app for deployment by zipps artifacts, upload to S3, generates CloudFormation template w/ references to the uploaded artifacts in S3. It doesn’t deploy the application.
+ - sam publish: publishes an AWS SAM application to the AWS Serverless Application Repository, does not generate the template file. It takes a packaged AWS SAM template and publishes the application to the specified region.
+ - sam deploy : zips your code artifacts, uploads them to Amazon S3, and produces a packaged AWS SAM template file that it uses to deploy your application.
+
+
+### AWS CLI new Lambda InvalidParameterValueException
+You developed a shell script which uses AWS CLI to create a new Lambda function. However, you received an InvalidParameterValueException after running the script.
+
+What is the MOST likely cause of this issue? 
+#### do
+You provided an IAM role in the CreateFunction API which AWS Lambda is unable to assume.
+#### dont
+The AWS Lambda service encountered an internal error.
+You have exceeded your maximum total code size per account.
+The resource already exists.
+You provided an IAM role in the CreateFunction API which AWS Lambda is unable to assume.
+#### info
+ - resource already exists : the ResourceConflictException will be returned
+ - AWS Lambda internal error : ServiceException
+ - exceeded maximum code size : CodeStorageExceededException
+
+
+
+### detach the root volume from the compromised EC2 instance
+An EBS-backed EC2 instance has been recently reported to contain a malware that could spread to your other instances. To fix this security vulnerability, you will need to attach its root EBS volume to a new EC2 instance which hosts a security program that can scan viruses, worms, Trojan horses, or spyware.
+
+What steps would you take to detach the root volume from the compromised EC2 instance?
+
+#### do
+Stop the instance then detach the volume.
+#### dont
+Detach the volume from the AWS Console. AWS takes care of unmounting the volume for you.
+Unmount the volume, stop the instance, and then detach.
+Unmount the volume from the OS and then detach.
+#### info
+ - root volume : must be stopped before it can be detached or unmounted
+
+
+### managing CloudFormation template updates 
+An application architect manages several AWS accounts for staging, testing, and production environments, which are used by several development teams. For application deployments, the developers use the similar base CloudFormation template for their applications.
+
+Which of the following can allow the developer to effectively manage the updates on this template across all AWS accounts with minimal effort?
+#### do
+Update the stacks on multiple AWS accounts using CloudFormation StackSets.
+#### dont
+Create and manage stacks on multiple AWS accounts using CloudFormation Change Sets.
+Upload the CloudFormation templates to CodeCommit and use a combination of CodeDeploy and CodePipeline to manage the deployment to multiple accounts.
+Define and manage stack instances on multiple AWS Accounts using CloudFormation Stack Instances.
+#### info
+ - CloudFormation Change Sets : allow you to preview and manage changes to a stack before applying them
+ - CloudFormation StackSets : create, update, or delete stacks across multiple accounts and regions with a single operation
+ - CloudFormation Stack Instances : a single stack within a StackSet
+ - CodeCommit : too much work use the thing they built for this use case 
+
+
+## Security
+
+
+### 
+A company has different AWS accounts, namely Account A, Account B, and Account C, which are used for their Development, Test, and Production environments respectively. A developer needs access to perform an audit whenever a new version of the application has been deployed to the Test (Account B) and production (Account C) environments.
+
+What is the MOST efficient way to provide the developer access to execute the specified task?
+#### do
+Grant the developer cross-account access to the resources of Accounts B and C.
+#### dont
+Set up AWS Organizations and attach a Service Control Policy to the developer to access the other accounts.
+Create separate identities and passwords for the developer on both the Test and Production accounts.
+Enable AWS multi-factor authentication (MFA) to the IAM User of the developer.
+#### info
+
+### 
+To improve their information security management system (ISMS), a company recently released a new policy which requires all database credentials to be encrypted and be automatically rotated to avoid unauthorized access.
+
+Which of the following is the MOST appropriate solution to secure the credentials?
+#### do
+Create a secret in AWS Secrets Manager and enable automatic rotation of the database credentials.
+#### dont
+
+Create an IAM Role which has full access to the database. Attach the role to the services which require access.
+Enable IAM DB authentication which rotates the credentials by default.
+
+Create a parameter to the Systems Manager Parameter Store using the PutParameter API with a type of SecureString.
+#### info
+
+
+### 
+A cryptocurrency exchange portal has a key management service hosted in their on-premises data center, which stores encryption keys and uses an RSA asymmetric encryption algorithm. The company has recently implemented a hybrid cloud architecture in AWS and you were assigned to migrate the exchange portal to their cloud infrastructure. For security compliance, the keys should be stored in dedicated, third-party validated hardware security modules under your exclusive control.
+
+Which of the following is the BEST solution that you should implement to meet the above requirement?
+#### do
+Import the encryption keys from your on-premises key management service to AWS CloudHSM.
+#### dont
+Use AWS KMS to store and manage the encryption keys.
+Develop a custom key management service using the AWS Encryption SDK.
+Import the encryption keys from your on-premises key management service to AWS Secrets Manager as Customer Master Keys (CMKs).
+#### info
+AWS CloudHSM provides hardware security modules in AWS Cloud. A hardware security module (HSM) is a computing device that processes cryptographic operations and provides secure storage for cryptographic keys.
+– Generate, store, import, export, and manage cryptographic keys, including symmetric keys and asymmetric key pairs.
+– Use symmetric and asymmetric algorithms to encrypt and decrypt data.
+– Use cryptographic hash functions to compute message digests and hash-based message authentication codes (HMACs).
+– Cryptographically sign data (including code signing) and verify signatures.
+– Generate cryptographically secure random data.
+You should consider using AWS CloudHSM instead of AWS KMS if you require:
+– Keys stored in dedicated, third-party validated hardware security modules under your exclusive control.
+– FIPS 140-2 compliance.
+– Integration with applications using PKCS#11, Java JCE, or Microsoft CNG interfaces.
+– High-performance in-VPC cryptographic acceleration (bulk crypto).
+Customer Master Keys (CMKs) is incorrect because you can’t store CMKs to AWS Secrets Manager.
+
+### 
+A company uses AWS Systems Manager (SSM) Parameter Store to manage configuration details for multiple applications. The parameters are currently stored in the Standard tier. The company wants its operations team to be notified if there are sensitive parameters that haven’t been rotated within 90 days.
+
+Which must be done to meet the requirement?
+#### do
+#### dont
+Convert the sensitive parameters from Standard tier into Advanced tier. Set a NoChangeNotification policy with a value of 90 days. Use Amazon EventBridge (Amazon CloudWatch Events) to send a notification via Amazon SNS.
+
+Configure a NoChangeNotification policy with a value of 90 days. Use Amazon EventBridge (Amazon CloudWatch Events) to send a notification via Amazon SNS.
+
+Convert the sensitive parameters from Standard tier into Advanced tier. Set a ExpirationNotification policy with a value of 90 days. Use Amazon EventBridge (Amazon CloudWatch Events) to send a notification via Amazon SNS.
+Set up an Amazon EventBridge (Amazon CloudWatch Events) event pattern that captures SSM Parameter-related events. Use Amazon SNS to send notifications.
+#### info
+ - NoChangeNotification - sends notification by reading the LastModifiedTime attribute of the parameter
+ - ExpirationNotification - deletes parameter after given amount of time regardless if changed or not
+ - Standard tier - does not support notification policies
+
+### 
+A product design firm has adopted a remote work policy and wants to provide employees with access to a suite of CAD software through EC2 Spot instances. These instances will be deployed using a CloudFormation template. The development team must be able to securely obtain software license keys in the template each time it is needed.
+
+Which solution meets this requirement while offering the most secure and cost-effective approach?
+#### do
+Store the license key as a SecureString in AWS Systems Manager (SSM) Parameter Store. Use the ssm-secure dynamic reference to retrieve the secret in the CloudFormation template.
+#### dont
+Embed the license keys in the Mapping section of the CloudFormation template. Let users choose the correct license key using the Parameter section. Enable the NoEcho attribute on the parameter.
+Pass the license key in the Parameter section of the CloudFormation template during stack creation. Enable the NoEcho attribute on the parameter.
+Store the license key as a secret in AWS Secrets Manager. Use the secretsmanager dynamic reference to retrieve the secret in the CloudFormation template.
+#### info
+Secrets manager SSPS costs money
+Systems Manager SSM is free
+
+### I dont understand this
+A company is currently in the process of integrating their on-premises data center to their cloud infrastructure in AWS. One of the requirements is to integrate the on-premises Lightweight Directory Access Protocol (LDAP) directory service to their AWS VPC using IAM.
+
+Which of the following provides the MOST suitable solution to implement if the identity store that they are using is not compatible with SAML?
+#### do
+Create a custom identity broker application in your on-premises data center and use STS to issue short-lived AWS credentials.
+#### dont
+Implement the AWS IAM Identity Center service to manage access between AWS and your LDAP.
+Create IAM roles to rotate the IAM credentials whenever LDAP credentials are updated.
+Set up an IAM policy that references the LDAP identifiers and AWS credentials.
+#### info
+ - LDAP : helps users find data about organizations, persons, and more
+ - SAML : Security Assertion Markup Language a standardized way to tell external applications and services that a user is who they say they are uses SSO
+
+### 
+You are a software developer for a multinational investment bank which has a hybrid cloud architecture with AWS. To improve the security of their applications, they decided to use AWS Key Management Service (KMS) to create and manage their encryption keys across a wide range of AWS services. You were given the responsibility to integrate AWS KMS with the financial applications of the company.
+
+Which of the following are the recommended steps to locally encrypt data using AWS KMS that you should follow? (Select TWO.)
+#### do
+Erase the encrypted data key from memory and store the plaintext data key alongside the locally encrypted data.
+Use the GenerateDataKey operation to get a data encryption key then use the plaintext data key in the response to encrypt data locally.
+#### dont
+Encrypt data locally using the Encrypt operation.
+Use the GenerateDataKeyWithoutPlaintext operation to get a data encryption key then use the plaintext data key in the response to encrypt data locally.
+Erase the plaintext data key from memory and store the encrypted data key alongside the locally encrypted data.
+
+#### info
+
+### 
+A company has created a private S3 bucket named tdojo. The Developer IAM role must be granted read access to all objects within this bucket. However, objects stored under the qa folder should be restricted to the QA IAM role only.
+
+Which S3 bucket policy will effectively implement the principle of least privilege access while satisfying the given requirements?
+#### do
+#### dont
+#### info
+just look at the permissions given to the different roles
+also the question is written wrong
+it sounds like the devs shouldnt have access to the qa folder but they do
+
+
+
+
+### 
+A company is using AWS Organizations to manage its multiple AWS accounts which is being used by its various departments. To avoid security issues, it is of utmost importance to test the impact of service control policies (SCPs) on your IAM policies and resource policies before applying them.
+
+Which of the following services can you use to test and troubleshoot IAM and resource-based policies?
+#### do
+#### dont
+AWS Config
+IAM Policy Simulator
+Systems Manager
+Amazon Inspector
+#### info
+ - IAM policy simulator : evaluates the policies that you choose and determines the effective permissions for each of the actions that you specify
+   - does not make an actual AWS service request
+ - AWS Config : service that enables you to assess, audit, and evaluate the configurations of your AWS resources
+ - Systems Manager : unified user interface to view operational data from multiple AWS services, automate operational tasks across AWS resources
+ - Amazon Inspector : automated security assessment service, improves the security and compliance of applications deployed on AWS.
+
+
+### 
+Your manager assigned you a task of implementing server-side encryption with customer-provided encryption keys (SSE-C) to your S3 bucket, which will allow you to set your own encryption keys. Amazon S3 will manage both the encryption and decryption process using your key when you access your objects, which will remove the burden of maintaining any code to perform data encryption and decryption.
+
+To properly upload data to this bucket, which of the following headers must be included in your request?
+#### do
+x-amz-server-side​-encryption​-customer-algorithm, x-amz-server-side-encryption-customer-key and x-amz-server-side-encryption-customer-key-MD5 headers
+#### dont
+x-amz-server-side-encryption-customer-key header only
+
+x-amz-server-side-encryption and x-amz-server-side-encryption-aws-kms-key-id headers
+
+x-amz-server-side-encryption, x-amz-server-side-encryption-customer-key and x-amz-server-side-encryption-customer-key-MD5 headers
+#### info
+ - x-amz-server-side-encryption-customer-algorithm : required header specifies the encryption algorithm. The header value must be “AES256”.
+
+ - x-amz-server-side-encryption-customer-key : This header provides the 256-bit, base64-encoded encryption key for Amazon S3 to use to encrypt or decrypt your data.
+
+ - x-amz-server-side-encryption-customer-key-MD5 : This header provides the base64-encoded 128-bit MD5 digest of the encryption key according to RFC 1321. Amazon S3 uses this header for a message integrity check to ensure the encryption key was transmitted without error.
+
+### 
+A startup has recently launched a high-quality photo sharing portal using Amazon Lightsail and S3. They noticed that there are other external websites which are linking and using their photos without permission. This has caused an increase on their data transfer cost and potential revenue loss.
+
+Which of the following is the MOST effective method to solve this issue?
+#### do
+Configure the S3 bucket to remove public read access and use pre-signed URLs with expiry dates.
+#### dont
+Block the IP addresses of the offending websites using Network Access Control List.
+Enable cross-origin resource sharing (CORS) which allows cross-origin GET requests from all origins.
+Use a CloudFront web distribution to serve the photos.
+#### info
+
+### 
+A web application is currently using an on-premises Microsoft SQL Server 2019 Enterprise Edition database. Your manager instructed you to migrate the application to Elastic Beanstalk and the database to RDS. For additional security, you must configure your database to automatically encrypt data before it is written to storage, and automatically decrypt data when the data is read from storage.
+
+Which of the following services will you use to achieve this?
+#### do
+Enable Transparent Data Encryption (TDE).
+#### dont
+Use IAM DB Authentication.
+Use Microsoft SQL Server Windows Authentication.
+Enable RDS Encryption.
+#### info
+- Transparent Data Encryption (TDE) : encrypt stored data on your DB instances running Microsoft SQL Server. encrypts data before it is written to storage, and automatically decrypts data when the data is read from storage.
+- Enable RDS Encryption : encrypts your Amazon RDS DB instances and snapshots at rest. 
+
+### 
+To improve their information security management system (ISMS), a company recently released a new policy which requires all database credentials to be encrypted and be automatically rotated to avoid unauthorized access.
+
+Which of the following is the MOST appropriate solution to secure the credentials?
+#### do
+Create a secret in AWS Secrets Manager and enable automatic rotation of the database credentials.
+#### dont
+Create a parameter to the Systems Manager Parameter Store using the PutParameter API with a type of SecureString.
+Enable IAM DB authentication which rotates the credentials by default.
+Create an IAM Role which has full access to the database. Attach the role to the services which require access.
+#### info
+
+### 
+A developer is working on an application that will process files encrypted with a data key generated from a KMS key. The application needs to decrypt the files locally before it can proceed with the processing of the files.
+
+Which of the following are valid and secure steps in decrypting data? (Select TWO.)
+#### do
+Use the Decrypt operation to decrypt the encrypted data key.
+Use the plaintext data key to decrypt data locally, then erase the plaintext data key from memory.
+#### dont
+Use the Decrypt operation to decrypt the plaintext data key.
+Use the plaintext data key to decrypt data locally, then erase the encrypted data key from memory.
+Use the encrypted data key to decrypt data locally, then erase the encrypted data key from memory.
+
+#### info
+
+
+### 
+A developer is building an application that will be hosted in ECS and must be configured to run tasks and services using the Fargate launch type. The application will have four different tasks, each of which will access different AWS resources than the others.
+
+Which of the following is the MOST efficient solution that can provide your application in ECS access to the required AWS resources?
+#### do
+Create 4 different IAM Roles with the required permissions and attach them to each of the 4 ECS tasks.
+#### dont
+Create 4 different Service-Linked Roles with the required permissions and attach them to each of the 4 ECS tasks.
+Create 4 different Container Instance IAM Roles with the required permissions and attach them to each of the 4 ECS tasks.
+Create an IAM Group with all the required permissions and attach them to each of the 4 ECS tasks.
+#### info
+ - Fargate : serverless compute engine for containers that works with ECS and Elastic Kubernetes Service (EKS). 
+   - runs containers without having to manage the underlying server infrastructure. 
+   - abstracts away the need to manage servers or clusters of Amazon EC2 instances
+   - enhances security through workload isolation by design
+ - you cannot directly attach an IAM Group to an ECS Task
+ - Container Instance IAM Role : only applies if you are using the EC2 launch type
+ - service-linked role : a unique type of IAM role that is linked directly to Amazon ECS itself, not on the ECS task
+
+###
+A company has a static website running in an Auto Scaling group of EC2 instances which they want to convert as a dynamic e-commerce web portal. One of the requirements is to use HTTPS to improve the security of their portal and also improve their search ranking as a reputable and secure site. A developer recently requested an SSL/TLS certificate from a third-party certificate authority (CA) which is ready to be imported to AWS.
+
+Which of the following services can the developer use to safely import the SSL/TLS certificate? (Select TWO.) 
+#### do
+AWS Certificate Manager : use this one
+IAM certificate store : use this ones in regions that dont support AWS cert manager
+#### dont
+Amazon Cognito
+CloudFront
+A private S3 bucket with versioning enabled
+#### info
+ - IAM certificate store : part of IAM, manage SSL/TLS server certificates for use with AWS services. 
+   - upload cert aws iam upload-server-certificate --server-certificate-name elastic-beanstalk-x509 --certificate-body file://https-cert.crt --private-key file://private-key.pem
+
+
+### 
+A financial mobile application has a serverless backend API which consists of DynamoDB, Lambda, and Cognito. Due to the confidential financial transactions handled by the mobile application, there is a new requirement provided by the company to add a second authentication method that doesn’t rely solely on user name and password.
+
+Which of the following is the MOST suitable solution that the developer should implement?
+
+#### do
+Integrate multi-factor authentication (MFA) to a user pool in Cognito to protect the identity of your users.
+#### dont
+Create a custom application that integrates with Amazon Cognito which implements the second layer of authentication.
+Use a new IAM policy to a user pool in Cognito.
+Use Cognito with SNS to allow additional authentication via SMS.
+#### info
+
+### 
+A programmer is developing a Node.js application that will be run on a Linux server in their on-premises data center. The application will access various AWS services such as S3, DynamoDB, and ElastiCache using the AWS SDK.
+
+Which of the following is the MOST suitable way to provide access for the developer to accomplish the specified task?
+#### do
+#### dont
+Go to the AWS Console and create a new IAM user with programmatic access. In the application server, create the credentials file at ~/.aws/credentials with the access keys of the IAM user.
+
+Go to the AWS Console and create a new IAM User with the appropriate permissions. In the application server, create the credentials file at ~/.aws/credentials with the username and the hashed password of the IAM User.
+
+Create an IAM role with the appropriate permissions to access the required AWS services and assign the role to the on-premises Linux server. Whenever the application needs to access any AWS services, request for temporary security credentials from STS using the AssumeRole API.
+Create an IAM role with the appropriate permissions to access the required AWS services. Assign the role to the on-premises Linux server.
+#### info
 
 
 ### 
@@ -565,9 +968,66 @@ In-place deployments to AWS Lambda.
 #### dont
 #### info
 
+### 
+#### do
+#### dont
+#### info
 
 
-## Security
+### 
+#### do
+#### dont
+#### info
+
+### 
+#### do
+#### dont
+#### info
+
+
+### 
+#### do
+#### dont
+#### info
+
+### 
+#### do
+#### dont
+#### info
+
+
+### 
+#### do
+#### dont
+#### info
+
+### 
+#### do
+#### dont
+#### info
+
+
+### 
+#### do
+#### dont
+#### info
+
+### 
+#### do
+#### dont
+#### info
+
+
+### 
+#### do
+#### dont
+#### info
+
+### 
+#### do
+#### dont
+#### info
+
 
 
 
