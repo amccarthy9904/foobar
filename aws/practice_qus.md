@@ -742,11 +742,9 @@ A company uses AWS Systems Manager (SSM) Parameter Store to manage configuration
 
 Which must be done to meet the requirement?
 #### do
-#### dont
 Convert the sensitive parameters from Standard tier into Advanced tier. Set a NoChangeNotification policy with a value of 90 days. Use Amazon EventBridge (Amazon CloudWatch Events) to send a notification via Amazon SNS.
-
+#### dont
 Configure a NoChangeNotification policy with a value of 90 days. Use Amazon EventBridge (Amazon CloudWatch Events) to send a notification via Amazon SNS.
-
 Convert the sensitive parameters from Standard tier into Advanced tier. Set a ExpirationNotification policy with a value of 90 days. Use Amazon EventBridge (Amazon CloudWatch Events) to send a notification via Amazon SNS.
 Set up an Amazon EventBridge (Amazon CloudWatch Events) event pattern that captures SSM Parameter-related events. Use Amazon SNS to send notifications.
 #### info
@@ -953,86 +951,502 @@ A programmer is developing a Node.js application that will be run on a Linux ser
 
 Which of the following is the MOST suitable way to provide access for the developer to accomplish the specified task?
 #### do
-#### dont
 Go to the AWS Console and create a new IAM user with programmatic access. In the application server, create the credentials file at ~/.aws/credentials with the access keys of the IAM user.
+#### dont
 
 Go to the AWS Console and create a new IAM User with the appropriate permissions. In the application server, create the credentials file at ~/.aws/credentials with the username and the hashed password of the IAM User.
-
 Create an IAM role with the appropriate permissions to access the required AWS services and assign the role to the on-premises Linux server. Whenever the application needs to access any AWS services, request for temporary security credentials from STS using the AssumeRole API.
 Create an IAM role with the appropriate permissions to access the required AWS services. Assign the role to the on-premises Linux server.
 #### info
-
+ - programmatic access : applications and scripts that make programmatic calls to AWS services
 
 ### 
+A developer runs a shell script that uses the aws s3 cp CLI to upload a large file to an S3 bucket. The S3 bucket is configured with Server-side encryption with AWS Key Management Service (SSE-KMS). An Access Denied error always shows up whenever the developer uploads a file with a size of 100 GB or more. However, whenever he uploads a smaller file, the request succeeds.
+
+Which of the following are possible reasons why this issue is happening? (Select TWO.)
+#### do
+The AWS CLI S3 commands perform a multipart upload when the file is large.
+The developer does not have the kms:Decrypt permission.
+#### dont
+The developer's IAM permission has an attached inline policy that restricts him from uploading a file to S3 with a size of 100 GB or more.
+The maximum size that can be encrypted in KMS is only 100 GB.
+The developer does not have the kms:Encrypt permission.
+#### info
+ - aws s3 cp : When you use the aws s3 cp command to upload a file larger than 100GB to Amazon S3, the AWS CLI automatically switches to using multipart upload, chunks
+ - you need kms:Decrypt and kms:GenerateDataKey* permissions because Amazon S3 must decrypt and read data from the encrypted file parts before it completes the multipart upload
+
+### 
+An application hosted in an Auto Scaling group of On-Demand EC2 instances is used to process data polled from an SQS queue and the generated output is stored in an S3 bucket. To improve security, you were tasked to ensure that all objects in the S3 bucket are encrypted at rest using server-side encryption with AWS KMS–Managed Keys (SSE-KMS).
+
+Which of the following is required to properly implement this requirement?
+#### do
+Add a bucket policy which denies any s3:PutObject action unless the request includes the x-amz-server-side-encryption header.
+#### dont
+Add a bucket policy which denies any s3:PutObject action unless the request includes the x-amz-server-side-encryption-aws-kms-key-id header.
+
+Add a bucket policy which denies any s3:PostObject action unless the request includes the x-amz-server-side-encryption header.
+
+Add a bucket policy which denies any s3:PostObject action unless the request includes the x-amz-server-side-encryption-aws-kms-key-id header.
+#### info
+ - SQS queue : fully managed message queuing service that enables you to decouple and scale microservices, distributed systems, and serverless applications
+ - x-amz-server-side-encryption : specify the server-side encryption algorithm that should be applied to the object
+ - x-amz-server-side-encryption-aws-kms-key-id : specifies a specific key to use during encryption
+
+### 
+A developer is using API Gateway Lambda Authorizer to securely authenticate the API requests to their web application. The authentication process should be implemented using a custom authorization scheme which accepts header and query string parameters from the API caller.
+
+Which of the following methods should the developer use to properly implement the above requirement?
 #### do
 #### dont
 #### info
 
 ### 
+A developer is using API Gateway Lambda Authorizer to securely authenticate the API requests to their web application. The authentication process should be implemented using a custom authorization scheme which accepts header and query string parameters from the API caller.
+
+Which of the following methods should the developer use to properly implement the above requirement?
 #### do
+Request Parameter-based Authorization
 #### dont
+Token-based Authorization
+Cross-Account Lambda Authorizer
+Amazon Cognito User Pools Authorizer
 #### info
 
 
 ### 
+A developer needs to encrypt all objects being uploaded by their application to the S3 bucket to comply with the company’s security policy. The bucket will use server-side encryption with Amazon S3-Managed encryption keys (SSE-S3) to encrypt the data using 256-bit Advanced Encryption Standard (AES-256) block cipher.
+
+Which of the following request headers should the developer use?
 #### do
+x-amz-server-side-encryption
 #### dont
+x-amz-server-side-encryption-customer-key-MD5
+x-amz-server-side-encryption-customer-algorithm
+x-amz-server-side-encryption-customer-key
 #### info
+ - x-amz-server-side-encryption-customer-algorithm : specify the encryption algorithm for server-side encryption with customer-provided keys (SSE-C)
 
 ### 
+A developer is using API Gateway Lambda Authorizer to provide authentication for every API request and control access to your API. The requirement is to implement an authentication strategy which is similar to OAuth or SAML.
+
+Which of the following is the MOST suitable method that the developer should use in this scenario?
 #### do
+Token-based Authorization
 #### dont
+Cross-Account Lambda Authorizer
+Request Parameter-based Authorization
+AWS STS-based Authentication
 #### info
+ - Requesting Parameter-based Lambda Authorization is incorrect because this does not use tokens to identify a caller
+
+ - AWS STS-based authentication is incorrect because this is not a valid type of API Gateway Lambda Authorizer.
+
+ - Cross-Account Lambda Authorizer is incorrect because this just enables you to use an AWS Lambda function from a different AWS account as your API authorizer function. not a valid Lambda authorizer type.
+
+### 
+Your development team is currently developing a financial application in AWS. One of the requirements is to create and control the encryption keys used to encrypt your data using the envelope encryption strategy to comply with the strict IT security policy of the company.
+
+Which of the following correctly describes the process of envelope encryption?
+#### do
+Encrypt plaintext data with a data key and then encrypt the data key with a top-level plaintext master key.
+#### dont
+Encrypt plaintext data with a data key and then encrypt the data key with a top-level encrypted master key.
+Encrypt plaintext data with a master key and then encrypt the master key with a top-level encrypted data key.
+Encrypt plaintext data with a master key and then encrypt the master key with a top-level plaintext data key.
+#### info
+ - envelope encryption strategy : encrypting data with a data encryption key (DEK) and then encrypting the DEK with another key(root key or a customer master key (CMK))
+
+###
+A serverless application is composed of several Lambda functions which reads data from RDS. These functions must share the same connection string that should be encrypted to improve data security.
+
+Which of the following is the MOST secure way to meet the above requirement?
+#### do
+Create a Secure String Parameter using the AWS Systems Manager Parameter Store.
+#### dont
+Create an IAM Execution Role that has access to RDS and attach it to the Lambda functions.
+Use AWS Lambda environment variables encrypted with CloudHSM.
+Use AWS Lambda environment variables encrypted with KMS which will be shared by the Lambda functions.
+#### info
+ - Lambda environment variables : not sharable across Lambda envs
+ - CloudHSM : not used with Lambda, KMS is preferred
+ - AWS SSPS Systems Manager Parameter Store : secure, hierarchical storage for configuration data and secrets management. store data, passwords, db strings, license codes as parameter values. store plain text or encrypted data.
 
 
 ### 
+A company has a suite of web applications that is heavily using RDS database in Multi-AZ Deployments configuration with several Read Replicas. For improved security, you were instructed to ensure that all of their database credentials, API keys, and other secrets are encrypted and rotated on a regular basis. You should also configure your applications to use the latest version of the encrypted credentials when connecting to the RDS database.
+
+Which of the following is the MOST appropriate solution to secure the credentials?
 #### do
+Use AWS Secrets Manager to store and encrypt the credentials and enable automatic rotation.
 #### dont
+Store the credentials in AWS KMS.
+Store the credentials to Systems Manager Parameter Store with a SecureString data type.
+Store the credentials to AWS ACM.
 #### info
+ - SSPS : does not provide automatic rotation
 
 ### 
+A software engineer is building a serverless application in AWS consisting of Lambda, API Gateway, and DynamoDB. She needs to implement a custom authorization scheme that uses a bearer token authentication strategy such as OAuth or SAML to determine the caller’s identity.
+
+Which of the features of API Gateway is the MOST suitable one that she should use to build this feature?
 #### do
 #### dont
 #### info
+ - Cross-Account Lambda Authorizer : use an AWS Lambda function from a different AWS account as your API authorizer function
+
+### 
+You are developing a new batch job for the enterprise application suite in your company, which is hosted in an Auto Scaling group of EC2 instances behind an ELB. The application is using an S3 bucket configured with Server-Side Encryption with AWS KMS-Managed Keys (SSE-KMS). The batch job must upload files to the bucket using the default AWS KMS key to protect the data at rest.
+
+What should you do to satisfy this requirement with the LEAST amount of configuration?
+#### do
+Include the x-amz-server-side-encryption header with a value of aws:kms in your upload request.
+#### dont
+Include the x-amz-server-side-encryption header with a value of AES256 in your upload request.
+
+Include the x-amz-server-side-encryption header with a value of aws:kms as well as the x-amz-server-side-encryption-aws-kms-key-id header containing the ID of the default AWS KMS key in your upload request.
+
+Include the x-amz-server-side​-encryption​-customer-algorithm, x-amz-server-side-encryption-customer-key, and x-amz-server-side-encryption-customer-key-MD5 headers with appropriate values in the upload request.
+#### info
+ - aws:kms :  AWS Key Management Service (AWS KMS) keys (SSE-KMS) managed keys
+ - AES256 :  Amazon S3-managed keys (SSE-S3) or customer SSE-C
+
+### 
+A developer is building the cloud architecture of an application which will be hosted in a large EC2 instance. The application will process the data and it will upload results to an S3 bucket.
+
+Which of the following is the SAFEST way to implement this architecture?
+
+#### do
+#### dont
+Use an IAM Inline Policy to grant the application the necessary permissions to upload data to S3.
+Store the access keys in the instance then use the AWS SDK to upload the results to S3.
+Install the AWS CLI then use it to upload the results to S3.
+Use an IAM Role to grant the application the necessary permissions to upload data to S3.
+#### info
+ - IAM Inline Policy : policies that are directly attached to a single IAM identity (user, group, or role),  embedded within the identity to which they apply, maintaining a strict one-to-one relationship
+ - IAM Role :  IAM identity for authorized entities (users, applications, or services) to perform actions on AWS resources
 
 
 ### 
+Your team is developing a serverless application, which is composed of multiple Lambda functions which process data from an SQS queue and stores the results to an RDS database. To comply with the strict IT policy of the company, you were instructed to configure these functions to share the same connection string that should be properly secured and encrypted.
+
+What should you do to protect, encrypt, and share your database credentials in AWS?
+
 #### do
+Use AWS Systems Manager Parameter Store as a Secure String Parameter.
 #### dont
+Use IAM DB Authentication in RDS to allow encrypted connections from each Lambda function.
+Store the database credentials as environment variables with KMS encryption which will be shared by the Lambda functions.
+Encrypt the database credentials and store them in an S3 bucket which the Lambda functions can fetch.
 #### info
-
-### 
-#### do
-#### dont
-#### info
-
-
-### 
-#### do
-#### dont
-#### info
-
-### 
-#### do
-#### dont
-#### info
-
-
-### 
-#### do
-#### dont
-#### info
-
-### 
-#### do
-#### dont
-#### info
-
-
-
 
 
 ## Development
+
+
+### 
+A web application is uploading large files, which are over 4 GB in size, in an S3 bucket called data.tutorialsdojo.com every 30 minutes. You want to minimize the time required to upload each file. Which of the following should you do to minimize upload time?
+#### do
+Use the Multipart upload API.
+#### dont
+Use the BatchWriteItem API.
+Enable Transfer Acceleration in the bucket.
+Use the Putltem API.
+#### info
+ - BatchWriteItem API : DynamoDB puts or deletes multiple items in one or more tables
+ - Multipart upload API : uploading of large objects to S3 in smaller parts, or "chunks," and then assemble them on the server-side to create the complete object
+ - Transfer Acceleration :  speed up the transfer of files over long distances between your client and an Amazon S3 bucket
+ - Putltem API : DynamoDB Creates a new item, or replaces an old item with a new item.
+
+### 
+A developer is building a new Docker application using ECS. She needs to allow containers to access ports on the host container instance to send or receive traffic using port mapping.
+
+Which component of ECS should the developer configure to properly implement this task?
+#### do
+Task definition
+#### dont
+Container Agent
+Container instance
+Service scheduler
+#### info
+ - Container Agent : runs on each container instance within an ECS cluster
+ - Container instance : an EC2 instance that has been configured to run Docker containers and the ECS Container Agent
+ - Task definition : blueprint for application describes one or more containers specifies, image to use, resource requirements, network config
+ - Service scheduler : ensures that the specified number of tasks are always running and automatically handles scaling and maintaining availability
+
+### 
+You are using an AWS Lambda function to process records in an Amazon Kinesis Data Streams stream which has 100 active shards. The Lambda function takes an average of 10 seconds to process the data and the stream is receiving 50 new items per second.
+
+Which of the following statements are TRUE regarding this scenario
+#### do
+There will be at most 100 Lambda function invocations running concurrently.
+#### dont
+The Lambda function has 500 concurrent executions.
+The Kinesis shards must be merged to increase the data capacity of the stream as well as the concurrency execution of the Lambda function.
+The Lambda function will throttle the incoming requests due to the excessive number of Kinesis shards.
+#### info
+ - shard : base throughput unit of an Amazon Kinesis data stream
+   - A single shard can ingest up to 1,000 data records per second or 1 MB/sec. For reads, it supports up to 2 MB/sec
+ - Lambda :  each Lambda invocation is associated with a specific shard, and the processing of records is scoped to that shard
+
+### 
+A startup has recently launched their new mobile game and is gaining a lot of new users everyday. The founders plan to add a new feature which will enable cross-device syncing of user profile data across mobile devices to improve the user experience.
+
+Which of the following services should they use to meet this requirement?
+#### do
+Cognito Sync
+#### dont
+AWS Amplify
+Cognito User Pools
+Cognito Identity Pools
+#### info
+ - Cognito Sync : synchronize application-related user data across devices
+ - Cognito User Pools : user directory for web and mobile app authentication and authorization
+ - Cognito Identity Pools : provide temporary AWS credentials for users who are guests (unauthenticated) and for users who have been authenticated and received a token
+
+### 
+A global financial company has hundreds of users from all over the world that regularly upload terabytes of transactional data to a centralized S3 bucket. You noticed that there are some users from different parts of the globe that take a lot of time to upload their data, which causes delays in the processing. You need to improve data throughput and ensure consistently fast data transfer to the S3 bucket regardless of the user’s location.
+
+Which of the following features should you use to satisfy the above requirement?
+
+AWS Dir
+#### do
+Amazon S3 Transfer Acceleration
+#### dont
+AWS Direct Connect
+CloudFront
+AWS Transfer for SFTP
+#### info
+ - AWS Transfer for SFTP : use sftp for transfer into s3 
+ - AWS Direct Connect : establishes a dedicated network connection from your premises to AWS
+ - CloudFront : CDN. It securely delivers data, videos, applications, and APIs to customers globally with low latency and high transfer speeds
+
+### 
+A developer is designing the cloud architecture of an internal application which will be used by about a hundred employees. She needs to ensure that the architecture is elastic enough to adequately match the supply of resources to the demand while maintaining its cost-effectiveness.
+
+Which of the following services can provide the MOST elasticity to the architecture? (Select TWO.)
+#### do
+DynamoDB
+EC2 Spot Fleet
+#### dont
+RDS
+WAF
+CloudFront
+#### info
+ - RDS : set up, operate, and scale a relational database in the cloud, doesn’t have the auto-scaling capabilities to dynamically adjust its capacity based on the demand, unlike DynamoDB
+ - WAF (Web Application Firewall) : protect your web applications or APIs against common web exploits that could affect application availability, compromise security, or consume excessive resources
+ - DynamoDB : key-value and document database
+ - EC2 Spot Fleet : request a fleet of Spot Instances, spare Amazon EC2 computing capacity available at up to a 90% discount compared to On-Demand prices
+
+
+### 
+A developer has recently completed a new version of a serverless application that is ready to be deployed using AWS SAM. There is a requirement that the traffic should shift from the previous Lambda function to the new version in the shortest time possible, but you still don’t want to shift traffic all-at-once immediately.
+
+Which deployment configuration is the MOST suitable one to use in this scenario?
+#### do
+CodeDeployDefault.LambdaCanary10Percent5Minutes
+#### dont
+CodeDeployDefault.HalfAtATime
+CodeDeployDefault.LambdaLinear10PercentEvery1Minute
+CodeDeployDefault.LambdaLinear10PercentEvery2Minutes
+#### info
+deployment preferences are part of the DeploymentPreference property under the AWS::Serverless::Function resource type
+CodeDeployDefault.HalfAtATimeis incorrect because this is only applicable for EC2/On-premises compute platform and not for Lambda
+
+### 
+You recently deployed an application to a newly created AWS account, which uses two identical Lambda functions to process ad-hoc requests. The first function processes incoming requests efficiently but the second one has a longer processing time even though both of the functions have exactly the same code. Based on your monitoring, the Throttles metric of the second function is greater than the first one in Amazon CloudWatch.
+
+Which of the following are possible solutions that you can implement to fix this issue? (Select TWO.)
+#### do
+Set the concurrency execution limit of both functions to 500.
+Set the concurrency execution limit of the second function to 0.
+Configure the second function to use an unreserved account concurrency.
+#### dont
+Set the concurrency execution limit of both functions to 450.
+Decrease the concurrency execution limit of the first function.
+#### info
+ - Throttles metric : how many requests the Lambda funct is throttleing itself from proccessing
+ - concurrency execution limit : the number of instances of the function that can run simultaneously, default 1000 across all Lambda functions, need to keep 100 unreserved to spread across non configured lambda functions
+
+### 
+A company decided to re-use the same Lambda function for multiple stages of their API, but the function should read data from a different Amazon DynamoDB table depending on which stage is being called. In order to accomplish this, they instructed the developer to pass configuration parameters to a Lambda function through mapping templates in API Gateway.
+
+Which of the following is the MOST suitable solution that the developer should use to meet this requirement?
+#### do
+#### dont
+Use Stage Variables.
+Set up traffic shifting with Lambda Aliases.
+Create environment variables in the Lambda function.
+Set up an API Gateway Private Integration to the Lambda function.
+#### info
+ - Stage Variables : name-value pairs that you can define as configuration attributes associated with a deployment stage of a REST API
+ - API Gateway Private Integration : expose HTTP/HTTPS resources within an Amazon Virtual Private Cloud (VPC) to clients outside of the VPC
+ - traffic shifting with Lambda Aliases : gradually shift incoming traffic between two versions of an AWS Lambda function based on pre-assigned weights
+
+### 
+A company has assigned a developer to automate the patch management, data synchronization, and other recurring tasks in their department. The developer needs to have a service which can coordinate multiple AWS services into serverless workflows.
+
+Which of the following is the MOST cost-effective service that the developer should implement in this scenario?
+#### do
+AWS Step Functions - coordinate multiple AWS services into serverless workflows
+#### dont
+AWS Batch
+AWS Lambda
+SWF
+#### info
+ - AWS Lambda pricing : is based on the number of requests and the duration of function execution time
+ - Batch pricing : type and number of instances used to run batch jobs, the amount of storage used, and the data transfer costs
+
+### 
+A serverless application is using API Gateway with a non-proxy Lambda Integration. A developer was tasked to expose a GET method on a new /getcourses resource to invoke the Lambda function, which will allow the consumers to fetch a list of online courses in JSON format. The consumers must include a query string parameter named courseType in their request to get the data.
+
+What is the MOST efficient solution that the developer should do to accomplish this requirement?
+#### do
+Configure the method request of the resource.
+#### dont
+Configure the integration request of the resource.
+Configure the integration response of the resource.
+Configure the method response of the resource.
+#### info
+
+### 
+A company is developing a serverless website that consists of images, videos, HTML pages and JavaScript files. There is also a requirement to serve the files with lowest possible latency to its global users.
+
+Which combination of services should be used in this scenario? (Select TWO.)
+#### do
+Amazon S3
+Amazon CloudFront
+#### dont
+Amazon Elastic File System
+Amazon EC2
+Amazon Glacier
+#### info
+ - cloudfront : cdn
+ - Amazon Elastic File System : not good for static files, doesnt integrate with cloud front
+ - ec2 : region spcific, not distributed
+
+### 
+A developer is working on an application which stores data to an Amazon DynamoDB table with the DynamoDB Streams feature enabled. He set up an event source mapping with DynamoDB Streams and AWS Lambda function to monitor any table changes then store the original data of the overwritten item in S3. When an item is updated, it should only send a copy of the item’s previous value to an S3 bucket and maintain the new value in the DynamoDB table.
+
+Which StreamViewType is the MOST suitable one to use in the DynamoDB configuration to fulfill this scenario?
+#### do
+OLD_IMAGE
+#### dont
+KEYS_ONLY
+NEW_AND_OLD_IMAGES
+NEW_IMAGE
+#### info
+ - DynamoDB Streams : a time-ordered sequence of item level changes in any DynamoDB table
+ - NEW_IMAGE : captures the entire item as it appears after it was modified. all attribute names, values
+ - KEYS_ONLY : captures only the key attributes of modified item. does not include any of item's attribute values
+ - NEW_AND_OLD_IMAGES :  both the new and the old images of the item.
+ - OLD_IMAGE : entire item as it appeared before it was modified.
+
+
+### 
+A media company seeks to protect its copyrighted images from unauthorized distribution. They want images uploaded to their Amazon S3 bucket to be automatically watermarked. A developer has already prepared the Lambda function for this image-processing job.
+
+Which option must the developer configure to automatically invoke the function at each upload?
+#### do
+#### dont
+Set up an Amazon S3 Event Notification to trigger the Lambda function when an ObjectCreated:Put event is detected in the bucket.
+Enable S3 Storage Lens to monitor the bucket and configure the Lambda function to be invoked whenever the metrics indicate a new object creation.
+
+Configure an S3 Lifecycle policy to transition images to the INTELLIGENT_TIERING storage class. Use S3 Inventory to generate a report of images that weren’t watermarked and set up the Lambda function to process the report.
+Use S3 Select to identify unwatermarked images based on metadata and create an EventBridge rule that triggers the Lambda function upon such findings.
+#### info
+ - S3 Lifecycle policies : manage storage transitions and object expirations, not event-driven actions like invoking Lambda functions upon upload
+ - S3 Select : retrieve specific subsets of data from objects in S3 without retrieving the entire object
+ - S3 Storage Lens : provide visibility into storage usage and activity trends
+ - ObjectCreated:Put : event to immediately trigger a Lambda function when an object is uploaded to the S3 bucket
+ 
+### 
+#### do
+#### dont
+#### info
+
+
+### 
+#### do
+#### dont
+#### info
+
+
+### 
+#### do
+#### dont
+#### info
+
+
+### 
+#### do
+#### dont
+#### info
+
+
+### 
+#### do
+#### dont
+#### info
+
+
+### 
+#### do
+#### dont
+#### info
+
+
+### 
+#### do
+#### dont
+#### info
+
+
+### 
+#### do
+#### dont
+#### info
+
+
+### 
+#### do
+#### dont
+#### info
+
+
+### 
+#### do
+#### dont
+#### info
+
+
+### 
+#### do
+#### dont
+#### info
+
+
+### 
+#### do
+#### dont
+#### info
+
+
+### 
+#### do
+#### dont
+#### info
+
+
+### 
+#### do
+#### dont
+#### info
+
+
+### 
+#### do
+#### dont
+#### info
 
 
 ### 
