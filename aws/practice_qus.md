@@ -1360,36 +1360,101 @@ Use S3 Select to identify unwatermarked images based on metadata and create an E
  - ObjectCreated:Put : event to immediately trigger a Lambda function when an object is uploaded to the S3 bucket
  
 ### 
+A company has a website hosted in a multicontainer Docker environment in Elastic Beanstalk. There is a requirement to integrate the website with API Gateway, where it simply passes client-submitted method requests to the backend. It is important that the client and backend interact directly with no intervention from API Gateway after the API method is set up, except for known issues such as unsupported characters.
+
+Which of the following integration types is the MOST suitable one to use to meet this requirement?
 #### do
+AWS_PROXY
 #### dont
+AWS
+HTTP
+HTTP_PROXY
+#### info
+ - AWS : expose AWS service actions
+ - AWS_PROXY : Lambda proxy integration, integrating an API method with a Lambda function invocation action
+ - HTTP : expose HTTP endpoints in the backend
+ - HTTP_PROXY : client to access backend HTTP endpoints with a streamlined integration setup on a single API method
+
+### 
+A programmer is developing a shell script that uses AWS CLI to list all objects of a given bucket. However, the script is timing out if the bucket has tens of thousands of objects.
+
+Which solution would most likely rectify the issue?
+#### do
+Add pagination parameters in the AWS CLI command
+#### dont
+Use S3 Select
+Enable Amazon S3 Transfer Acceleration
+Enable CORS
 #### info
 
 
 ### 
+A company is re-architecting its legacy application to use AWS Lambda and DynamoDB. The table is provisioned to have 10 read capacity units, and each item has a size of 4 KB.
+
+How many eventual and strong consistent read requests can the table handle per second?
 #### do
+10 strongly consistent reads and 20 eventually consistent reads per second
 #### dont
+20 strongly consistent reads and 10 eventually consistent reads per second
+5 strongly consistent reads and 20 eventually consistent reads per second
+10 strongly consistent reads and 10 eventually consistent reads per second
 #### info
+ - read request unit : represents one strongly consistent read request, or two eventually consistent read requests per 4KB
 
 
 ### 
+You are developing an online game where the app preferences and game state of the player must be synchronized across devices. It should also allow multiple users to synchronize and collaborate shared data in real time.
+
+Which of the following is the MOST appropriate solution that you should implement in this scenario?
+
+Integrate AWS AppSync to your mobile app.
+Integrate AWS Amplify to your mobile app.
+Integrate Amazon Cognito Sync to your mobile app.
+Integrate Amazon Pinpoint to your mobile app.
 #### do
 #### dont
 #### info
-
+ - AppSync : simplifies the development of GraphQL APIs by handling the heavy lifting of connecting to data sources, managing authentication, and providing real-time data updates
+ - Cognito Sync : does not allow multiple users to synchronize and collaborate in real-time on shared data
+ - Pinpoint : engage with your customers send push notifications, emails, SMS text messages, and voice messages
 
 ### 
+
+Category: CDA – Development with AWS Services
+A mobile game is using a DynamoDB table named GameScore that keeps track of users and scores. Each item in the table is identified by a partition key (UserId) and a sort key (GameTitle). The diagram below shows how the items in the table are organized:
+
+A developer wants to write a leaderboard application to display the top scores for each game.
+
+How can the developer meet the requirement in the MOST efficient manner?
+
 #### do
+Create a global secondary index. Assign the GameTitle attribute as the partition key and the TopScore attribute as the sort key.
 #### dont
+Use the Scan operation and filter the results based on a GameTitle value.
+Create a local secondary index. Assign the TopScore attribute as the partition key and the GameTitle attribute as the sort key.
+Create a local secondary index. Assign the GameTitle attribute as the partition key and the TopScore attribute as the sort key.
 #### info
-
-
+ - global secondary index : have a partition key and an optional sort key that can be different from those on the base table
+   - own provisioned throughput settings for read and write activity, separate from those of the table
+   - index items across all partitions of the base table without any size constraints
+   - can be added to an existing table at any time
+   - dont support strongly consistent reads, all reads are eventually consistent
+ - local secondary index : same partition key as the base table but a different sort key
+   - share provisioned throughput settings for read and write activity with the table they are indexing
+   - 10GB item collection size limit for any one partition key value
+   - must be created when the table is created.
+   - support strongly consistent reads
+ - Scan operation : reads every item in a table
 ### 
-#### do
-#### dont
-#### info
+A developer is planning to add a global secondary index in a DynamoDB table. This will allow the application to query a specific index that can span all of the data in the base table, across all partitions.
 
+Which of the following should the developer consider when using this type of index? (Select TWO.)
 
-### 
+Queries on this index support eventual consistency only.
+For each partition key value, the total size of all indexed items must be 10 GB or less.
+Queries or scans on this index consume read capacity units from the base table.
+When you query this index, you can choose either eventual consistency or strong consistency.
+Queries or scans on this index consume capacity units from the index, not from the base table.
 #### do
 #### dont
 #### info
