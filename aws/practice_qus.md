@@ -1208,7 +1208,6 @@ A global financial company has hundreds of users from all over the world that re
 
 Which of the following features should you use to satisfy the above requirement?
 
-AWS Dir
 #### do
 Amazon S3 Transfer Acceleration
 #### dont
@@ -1272,8 +1271,8 @@ A company decided to re-use the same Lambda function for multiple stages of thei
 
 Which of the following is the MOST suitable solution that the developer should use to meet this requirement?
 #### do
-#### dont
 Use Stage Variables.
+#### dont
 Set up traffic shifting with Lambda Aliases.
 Create environment variables in the Lambda function.
 Set up an API Gateway Private Integration to the Lambda function.
@@ -1450,75 +1449,199 @@ A developer is planning to add a global secondary index in a DynamoDB table. Thi
 
 Which of the following should the developer consider when using this type of index? (Select TWO.)
 
+#### do
 Queries on this index support eventual consistency only.
+#### dont
 For each partition key value, the total size of all indexed items must be 10 GB or less.
 Queries or scans on this index consume read capacity units from the base table.
 When you query this index, you can choose either eventual consistency or strong consistency.
 Queries or scans on this index consume capacity units from the index, not from the base table.
-#### do
-#### dont
 #### info
 
 
 ### 
+Both the read and write operations to your DynamoDB table are throttled, which are causing errors in your application. You checked the CloudWatch metrics but they indicate that the consumed capacity units haven’t exceeded the provisioned capacity units. Upon further investigation, you found that the issue is caused by a “hot partition” in your table in which a certain partition is accessed by your downstream applications much more frequently than other partitions.
+
+What should you do to resolve this issue in your application with MINIMAL cost? (Select TWO.)
+
 #### do
+Implement error retries and exponential backoff.
+Refactor your application to distribute your read and write operations as evenly as possible across your table.
 #### dont
+Increase the amount of read or write capacity for your table.
+Implement read sharding to distribute workloads evenly.
+Use DynamoDB Accelerator (DAX).
+#### info
+ -  DynamoDB Accelerator (DAX) : is incorrect because although this will solve the problem, it still entails additional cost to maintain a DAX cluster
+ - read or write capacity for your table : is incorrect because although it will also alleviate the throttling issues of your application, it is an expensive solution to implement
+ - read sharding to distribute workloads evenly : is incorrect because you should implement a write sharding in your application instead
+
+### 
+A company is using OpenAPI, which is also known as Swagger, for the API specifications of their REST web services that are hosted on their on-premises data center. They want to migrate their system to AWS using Lambda and API Gateway. In line with this, you are instructed to create a new API and populate it with the resources and methods from their Swagger definition.
+
+Which of the following is the EASIEST way to accomplish this task?
+
+#### do
+Import their Swagger or OpenAPI definitions to API Gateway using the AWS Console.
+#### dont
+Use CodeDeploy to migrate and deploy the company's web services to API Gateway.
+Create models and templates for request and response mappings based on the company's API definitions.
+Use AWS SAM to migrate and deploy the company's web services to API Gateway.
 #### info
 
 
 ### 
+In order to quickly troubleshoot their systems, your manager instructed you to record the calls that your application makes to all AWS services and resources. You developed a custom code that will send the segment documents directly to X-Ray by using the PutTraceSegments API.
+
+What should you include in your segment document to meet the above requirement?
+
 #### do
 #### dont
+metadata
+tracing header
+annotations
+subsegments
+#### info
+ - AWS X-Ray : provides developers with tools to analyze and debug their applications
+ - subsegments :  record calls to AWS services and resources that your application makes, such as calls to internal or external HTTP web APIs or SQL database queries
+ - annotations : key-value pairs that are indexed for use with filter expressions
+ - metadata : one or more fields with values of any type, including objects and arrays. Metadata is not indexed by X-Ray, meaning it cannot be used with filter expressions
+ - tracing header : for linking together the trace data from different services and resources involved in a request. It contains a unique trace ID assigned to every client request, and each service in the request chain sends traces to X-Ray with this trace ID. 
+ 
+### 
+A company has an application that is using CloudFront to serve their static contents to their users around the globe. They are receiving a number of bad reviews from their customers lately because it takes a lot of time to log into their website. Sometimes, their users are also getting HTTP 504 errors which is why the developer was instructed to fix this problem immediately.
+
+Which of the following combination of options should the developer use together to set up a cost-effective solution for this scenario? (Select TWO.)
+
+#### do
+Customize the content that the CloudFront web distribution delivers to your users using Lambda@Edge, which allows your Lambda functions to execute the authentication process in AWS locations closer to the users.
+Configure an origin failover by creating an origin group with two origins. Specify one as the primary origin and the other as the second origin which CloudFront automatically switches to when the primary origin returns 
+#### dont
+Launch your application to multiple AWS regions to serve your global users. Use a Route 53 record with latency routing policy to route incoming traffic to the region with the best latency to the user.specific HTTP status code failure responses.
+Launch your application to multiple and geographically disperse VPCs on various AWS regions then create a transit VPC to easily connect all your resources. Use several Lambda functions in each region using the AWS Serverless Application Model (SAM) service to improve the overall application performance.
+
+Add a Cache-Control max-age directive to your objects in CloudFront and specify the longest practical value for max-age to increase the cache hit ratio of your CloudFront distribution.
+#### info
+ - HTTP 504  Gateway Timeout error : server, acting as a gateway or proxy, does not receive a timely response from an upstream server it accessed in attempting to complete the request
+ - Lambda@Edge : run code across Amazon CloudFront edge locations globally without provisioning or managing servers, for latency-sensitive use cases where your end viewers are distributed globally, authentication and authorization, dynamic content generation, URL redirection
+ - origin failover in CloudFront :  enhance the high availability and reliability of web applications by automatically switching to a secondary origin when the primary origin fails or returns specific HTTP status codes indicating a failure
+
+### 
+A tech company has a real-time traffic monitoring system which uses Amazon Kinesis Data Stream to collect data and a group of EC2 instances that consume and process the data stream. Your development team is responsible for adjusting the number of shards in the data stream to adapt to changes in the rate of data flow.
+
+Which of the following are correct regarding Kinesis resharding which your team should consider in managing the application? (Select TWO.)
+
+#### do
+You can increase the stream's capacity by splitting shards.
+You can decrease the stream's capacity by merging shards.
+#### dont
+You have to merge the hot shards to increase the capacity of the stream.
+You have to split the cold shards to decrease the capacity of the stream.
+The data records that are flowing to the parent shards will be lost when you reshard.
+#### info
+ - Kinesis resharding : adjust the number of shards in your stream to adapt to changes in the rate of data flow through the stream
+ - Shard Split:  divides a shard into two, increases data capacity of stream, pay per shard costs money
+ - Shard Merge: combines two shards into one, decreases data capacity and cost
+ - hot shard : getting more data than expected, split
+ - cold shard : getting less data than expected, merge
+
+### 
+A company is transitioning their systems to AWS due to the limitations of their on-premises data center. As part of this project, a developer was assigned to build a brand new serverless architecture in AWS, which will be composed of AWS Lambda, API Gateway, and DynamoDB in a single stack. She needs a simple and reliable framework that will allow her to share configuration such as memory and timeouts between resources and deploy all related resources together as a single, versioned entity.
+
+Which of the following is the MOST appropriate service that the developer should use in this scenario?
+
+#### do
+AWS SAM
+#### dont
+AWS Systems Manager
+AWS CloudFormation
+Serverless Application Framework
 #### info
 
 
 ### 
+You are developing a high-traffic online stocks trading application, which will be hosted in an ECS Cluster and will be accessed by thousands of investors for intraday stocks trading. Each task of the cluster should be evenly placed across multiple Availability Zones to avoid any service disruptions.
+
+Which of the following is the MOST suitable placementStrategy configuration that you should use in your task definition?
 #### do
+
+"placementStrategy": [
+{
+"field": "attribute:ecs.availability-zone",
+"type": "spread"
+}
+]
+
 #### dont
+"placementStrategy": [
+{
+"field": "instanceId",
+"type": "spread"
+}
+]
+
+
+
+"placementStrategy": [
+{
+"field": "memory",
+"type": "binpack"
+}
+]
+
+
+
+"placementStrategy": [
+{
+"type": "random"
+}
+]
+
+
 #### info
 
 
 ### 
+You are working as an IT Consultant for a top investment bank in Europe which uses several serverless applications in their AWS account. They just launched a new API Gateway service with a Lambda proxy integration and you were instructed to test out the new API. However, you are getting a Connection refused error whenever you use this Invoke URL http://779protaw8.execute-api.us-east-1.amazonaws.com/tutorialsdojo/ of the API Gateway.
+
+Which of the following is the MOST likely cause of this issue?
 #### do
+You are not using HTTPS in invoking the API.
 #### dont
+You are not using WebSocket in invoking the API.
+You are not using FTP in invoking the API.
+You are not using HTTP/2 in invoking the API.
 #### info
+API Gateway only supports HTTPS.
 
 
 ### 
-#### do
-#### dont
-#### info
+A company operates an e-commerce website on Amazon Elastic Container Service (ECS) behind an Application Load Balancer (ALB). They’ve set their ALB as an origin for an Amazon CloudFront distribution. Users interact with the website via a custom domain linked to the CloudFront distribution, all maintained within a public hosted zone in Amazon Route 53.
 
+The company wants to display region-specific pricing tables to its users. For example, when a user from the UK visits the site, they should be redirected to https://tutorialsdojo.com/uk/, while users from the Philippines should view prices on https://tutorialsdojo.com/ph/
+#### do
+Implement a CloudFront function that returns the appropriate URL based on the CloudFront-Viewer-Country. Configure the distribution to trigger the function on Viewer request events.
+#### dont
+Configure the Route 53 record to use the geolocation routing policy.
+Forward the CloudFront-Viewer-Address header to the web server running on the ECS cluster. Implement a custom logic that matches the header’s value against a GeoIP database to determine user location. Based on the resolved location, redirect users to the appropriate region-specific URL.
+Use AWS Web Application Firewall (WAF's) geo-matching rule to identify the user country and attach it to the ALB. Configure ALB listener rules with path conditions to route traffic based on the identified country.
+#### info
+ - Route 53 geolocation routing policy : for directing traffic to specific resources based on user location for performance or regulatory reasons, not for content personalization based on geolocation.
 
 ### 
+A company has a development team that’s heavily relying on AWS CodeCommit, CodeBuild, and CodeDeploy. The management would like to further automate its CI/CD process. They requested a system that monitors the status of each code change, from the moment it’s committed through to its deployment.
+
+Which of the following AWS services will help you achieve this?
+
 #### do
+AWS CodePipeline
 #### dont
+Amazon CodeGuru
+AWS Elastic Beanstalk
+AWS Fault Injection Simulator
 #### info
-
-
-### 
-#### do
-#### dont
-#### info
-
-
-### 
-#### do
-#### dont
-#### info
-
-
-### 
-#### do
-#### dont
-#### info
-
-
-### 
-#### do
-#### dont
-#### info
-
+ - Amazon CodeGuru :  detect potential defects in Java and Python code that are difficult for developers to find, analyzes the application runtime profile to identify the most expensive lines of code
+ - AWS CodePipeline : continuous delivery service that automates the steps required to release software changes continuously
 
 
 ## Troubleshooting + Optimization
