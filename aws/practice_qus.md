@@ -1110,6 +1110,24 @@ Include the x-amz-server-side​-encryption​-customer-algorithm, x-amz-server-
  - aws:kms :  AWS Key Management Service (AWS KMS) keys (SSE-KMS) managed keys
  - AES256 :  Amazon S3-managed keys (SSE-S3) or customer SSE-C
 
+
+
+### 
+You are building a distributed system using KMS where you need to encrypt data at a later time. An API must be called that returns only the encrypted copy of the data key which you will use for encryption. After an hour, you will decrypt the data key by calling the Decrypt API then using the returned plaintext data key to finally encrypt the data.
+
+Which is the MOST suitable KMS API that the system should use to securely implement the requirements described above?
+#### do
+#### dont
+Encrypt
+GenerateRandom
+GenerateDataKeyWithoutPlaintext
+GenerateDataKey
+#### info
+ - GenerateRandom : generates a cryptographically secure random byte string. It's useful for generating keys, initialization vectors, or any other random data
+ - GenerateDataKeyWithoutPlaintext: generates a unique symmetric data key for use outside of AWS KMS. It returns an encrypted copy of the data key, which is encrypted under a specified symmetric encryption KMS key. This operation is useful for systems that need to encrypt data at some point but not immediately. The encrypted data key can be decrypted later when needed for encryption operations
+ - GenerateDataKey : generates a unique symmetric data key for use outside of AWS KMS. However, it returns both a plaintext copy of the data key and an encrypted copy that is encrypted under a specified symmetric encryption KMS key. This operation is useful when you need both the plaintext key for immediate encryption operations and the encrypted key for secure storage or later decryption
+
+
 ### 
 A developer is building the cloud architecture of an application which will be hosted in a large EC2 instance. The application will process the data and it will upload results to an S3 bucket.
 
@@ -1644,9 +1662,86 @@ AWS Fault Injection Simulator
  - AWS CodePipeline : continuous delivery service that automates the steps required to release software changes continuously
 
 
+### 
+You are developing a Lambda function which processes event notifications from Amazon S3. It is expected that the function will have:
+
+ 50 requests per second
+100 seconds to complete each request
+What should you do to prevent any issues when the function has been deployed and becomes operational?
+#### do
+Request for AWS to increase the limit of your concurrent executions.
+#### dont
+Increase the concurrency limit of the function.
+Implement exponential backoff in your application.
+No additional action needed since Lambda will automatically scale based on the incoming requests.
+#### info
+ estimate the capacity used by your function:
+concurrent executions = (invocations per second) x (average execution duration in seconds)
+      = (50 events per second) x (100 seconds average execution duration)
+=  5,000 concurrent executions
+By default, AWS Lambda limits the total concurrent executions across all functions within a given region to 1000. This limit can be raised by requesting for AWS to increase the limit of the concurrent executions of your account.
+
+
+### 
+A technical manager needs permission to create new repositories and delete them in CodeCommit. This will enable her to manage all of the code repositories of each development teams and remove duplicate or unused ones.
+
+Which of the following permissions should be given in order to comply with the standard security advice of granting least privilege?
+
+
+#### do
+#### dont
+codecommit:CreateRepository and codecommit:DeleteRepository
+#### info
+codecommit:GitPull and codecommit:GitPush
+codecommit:CreateBranch and codecommit:DeleteBranch
+codecommit:*
+
+### 
+#### do
+#### dont
+#### info
+
+### 
+#### do
+#### dont
+#### info
+
 ## Troubleshooting + Optimization
 
 
+
+### 
+A new IT policy requires you to trace all calls that your Node.js application sends to external HTTP web APIs as well as SQL database queries. You have to instrument your application, which is hosted in Elastic Beanstalk, in order to properly trace the calls via the X-Ray console .
+
+What should you do to comply with the given requirement?
+
+#### do
+Enable the X-Ray daemon by including the xray-daemon.config configuration file in the .ebextensions directory of your source code.
+#### dont
+Create a Docker image that runs the X-Ray daemon.
+Enable active tracing in the Elastic Beanstalk by including the healthcheckurl.config configuration file in the .ebextensions directory of your source code.
+Use a user data script to run the daemon automatically.
+#### info
+
+### 
+#### do
+#### dont
+#### info
+
+### 
+#### do
+#### dont
+#### info
+
+### 
+#### do
+#### dont
+#### info
+
+### 
+#### do
+#### dont
+#### info
 
 ### 
 #### do
